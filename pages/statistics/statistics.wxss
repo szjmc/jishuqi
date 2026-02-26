@@ -1,0 +1,172 @@
+.container {
+  padding: 20rpx;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40rpx;
+}
+
+.title {
+  font-size: 48rpx;
+  font-weight: bold;
+  text-align: center;
+  flex: 1;
+  color: #333;
+}
+
+.translate-btn {
+  padding: 12rpx 24rpx;
+  background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+  color: white;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  box-shadow: 0 4rpx 12rpx rgba(139, 92, 246, 0.3);
+}
+
+.tabs {
+  display: flex;
+  background: white;
+  border-radius: 50rpx;
+  padding: 8rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx;
+  border-radius: 40rpx;
+  background: transparent;
+  font-size: 28rpx;
+  color: #666;
+  transition: all 0.3s ease;
+}
+
+.tab.active {
+  background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+  color: white;
+  font-weight: bold;
+}
+
+.content {
+  padding: 10rpx;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+}
+
+.card {
+  padding: 40rpx;
+  border-radius: 24rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.total-card {
+  background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+  color: white;
+}
+
+.daily-card {
+  background: linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%);
+  color: white;
+}
+
+.yearly-card {
+  background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
+  color: white;
+}
+
+.card-title {
+  font-size: 32rpx;
+  display: block;
+  margin-bottom: 20rpx;
+  font-weight: 500;
+  opacity: 0.95;
+}
+
+.big-number {
+  font-size: 100rpx;
+  font-weight: bold;
+  display: block;
+  margin: 20rpx 0;
+}
+
+.label {
+  font-size: 28rpx;
+  display: block;
+  opacity: 0.9;
+}
+
+.info {
+  margin-top: 30rpx;
+  padding-top: 20rpx;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.info text {
+  display: block;
+  font-size: 24rpx;
+  margin: 10rpx 0;
+  opacity: 0.95;
+}
+
+.records-list {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.list-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  padding-bottom: 15rpx;
+  border-bottom: 2rpx solid #f0f0f0;
+}
+
+.record-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.record-item:last-child {
+  border-bottom: none;
+}
+
+.record-name {
+  font-size: 28rpx;
+  color: #333;
+  flex: 1;
+}
+
+.record-count {
+  font-size: 32rpx;
+  font-weight: bold;
+  background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.empty-tip {
+  text-align: center;
+  padding: 60rpx 0;
+  font-size: 28rpx;
+  color: #999;
+}

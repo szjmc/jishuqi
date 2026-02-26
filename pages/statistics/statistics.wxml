@@ -1,0 +1,96 @@
+<view class="container">
+  <view class="header">
+    <view class="title">{{isTibetan ? 'བསྡུས་གྲངས་ལྟེ་ག' : '统计中心'}}</view>
+    <view class="translate-btn" bindtap="toggleLanguage">
+      {{isTibetan ? '中文' : '藏文'}}
+    </view>
+  </view>
+
+  <!-- 选项卡 -->
+  <view class="tabs">
+    <view
+      class="tab {{currentTab === 'total' ? 'active' : ''}}"
+      bindtap="switchTab"
+      data-tab="total"
+    >{{isTibetan ? 'སྡོམས' : '总计'}}</view>
+    <view
+      class="tab {{currentTab === 'daily' ? 'active' : ''}}"
+      bindtap="switchTab"
+      data-tab="daily"
+    >{{isTibetan ? 'ཉིན་བསྡུས' : '日统计'}}</view>
+    <view
+      class="tab {{currentTab === 'yearly' ? 'active' : ''}}"
+      bindtap="switchTab"
+      data-tab="yearly"
+    >{{isTibetan ? 'ལོ་བསྡུས' : '年统计'}}</view>
+  </view>
+
+  <!-- 内容区域 -->
+  <view class="content">
+
+    <!-- 总计 -->
+    <view wx:if="{{currentTab === 'total'}}" class="section">
+      <view class="card total-card">
+        <text class="card-title">{{isTibetan ? 'ལོ་རྒྱུས་སྡོམས་རྩིས' : '历史累计统计'}}</text>
+        <text class="big-number">{{totalStatistics.totalCount}}</text>
+        <text class="label">{{isTibetan ? 'སྡོམས་གྲངས' : '累计总数'}}</text>
+        <view class="info">
+          <text>{{isTibetan ? 'ཉིན་གྲངས་' + totalStatistics.totalDays + 'ཉིན' : '记录天数：' + totalStatistics.totalDays + ' 天'}}</text>
+          <text>{{isTibetan ? 'འགོ་བཙུགས་ཚེས་གྲངས་' + totalStatistics.startDate : '起始日期：' + totalStatistics.startDate}}</text>
+        </view>
+      </view>
+
+      <view class="records-list">
+        <text class="list-title">{{isTibetan ? 'ཁ་འདོན་སྤྱི་བསྡོམས་གྲངས་ཀ' : '各经文统计'}}</text>
+        <view class="record-item" wx:for="{{totalStatistics.records}}" wx:key="id">
+          <text class="record-name">{{item.name}}</text>
+          <text class="record-count">{{item.count}}</text>
+        </view>
+        <view wx:if="{{totalStatistics.records.length === 0}}" class="empty-tip">
+          {{isTibetan ? 'ད་རེབ་གནས་ཚུལ་མེད།' : '暂无数据'}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 日统计 -->
+    <view wx:if="{{currentTab === 'daily'}}" class="section">
+      <view class="card daily-card">
+        <text class="card-title">{{dailyStatistics.tibetanDate || dailyStatistics.date}} {{isTibetan ? 'སྡོམས་རྩིས' : '统计'}}</text>
+        <text class="big-number">{{dailyStatistics.totalCount}}</text>
+        <text class="label">{{isTibetan ? 'དེ་རིང་སྡོམས་གྲངས' : '今日总数'}}</text>
+      </view>
+
+      <view class="records-list">
+        <text class="list-title">{{isTibetan ? 'དེ་རིང་གི་ཁ་འདོན་སྤྱི་བསྡོམས་གྲངས་ཀ' : '今日记录'}}</text>
+        <view class="record-item" wx:for="{{dailyStatistics.records}}" wx:key="id">
+          <text class="record-name">{{item.name}}</text>
+          <text class="record-count">{{item.count}}</text>
+        </view>
+        <view wx:if="{{dailyStatistics.records.length === 0}}" class="empty-tip">
+          {{isTibetan ? 'དེ་རིང་བཀོད་པ་མེད།' : '今日暂无记录'}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 年统计 -->
+    <view wx:if="{{currentTab === 'yearly'}}" class="section">
+      <view class="card yearly-card">
+        <text class="card-title">{{yearlyStatistics.tibetanYear || yearlyStatistics.year}} {{isTibetan ? 'སྡོམས་རྩིས' : '统计'}}</text>
+        <text class="big-number">{{yearlyStatistics.totalCount}}</text>
+        <text class="label">{{isTibetan ? 'ལོ་སྡོམས་གྲངས' : '年度总数'}}</text>
+      </view>
+
+      <view class="records-list">
+        <text class="list-title">{{isTibetan ? 'ཆོས་གཞུང་སོ་སོའི་ལོ་སྡོམས' : '各经文年度统计'}}</text>
+        <view class="record-item" wx:for="{{yearlyStatistics.records}}" wx:key="id">
+          <text class="record-name">{{item.name}}</text>
+          <text class="record-count">{{item.count}}</text>
+        </view>
+        <view wx:if="{{yearlyStatistics.records.length === 0}}" class="empty-tip">
+          {{isTibetan ? 'ལོ་འདིར་བཀོད་པ་མེད།' : '本年度暂无记录'}}
+        </view>
+      </view>
+    </view>
+
+  </view>
+</view>

@@ -1,0 +1,8 @@
+{
+  "usingComponents": {},
+  "navigationBarTitleText": "统计中心",
+  "navigationBarBackgroundColor": "#8B5CF6",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#f8f9fa",
+  "backgroundTextStyle": "light"
+}

@@ -1,0 +1,292 @@
+<!-- 主页面 -->
+<view class="container">
+  <!-- 标题 -->
+  <view class="header">
+    <text class="title">{{isTibetan ? 'ཁ་འདོན་སྤྱི་བསྡོམས་་གྲངས་འཛིན' : '计数小程序'}}</text>
+    <text class="subtitle">{{isTibetan ? 'ཉིན་ལྟར་ནང་པའི་བསྙེན་པ་བཀོད་ནས་བསོད་ནམས་གསོག་པ' : '记录每日念佛修行，积累福德资粮'}}</text>
+    <view class="translate-btn" bindtap="toggleLanguage">
+      {{isTibetan ? '中文' : 'བོད་ཡིག།'}}
+    </view>
+  </view>
+
+  <!-- 主内容区 -->
+  <view class="main-content">
+    <!-- 左侧：经文计数区 -->
+    <view class="left-section">
+      <view class="card chanting-card">
+        <view class="card-header">
+          <text class="icon">📖</text>
+          <text class="card-title">{{isTibetan ? 'ཁ་འདོན་གྲངས་ཀ' : '经文计数'}}</text>
+        </view>
+        
+        <!-- 经文计数列表 -->
+        <view class="chanting-list">
+          <block wx:for="{{chantingItems}}" wx:key="id">
+            <view class="chanting-item">
+              <view class="item-header">
+                <text class="item-name">{{item.name}}</text>
+                <view class="item-actions">
+                  <button class="btn-edit" size="mini" bindtap="onEditItem" data-id="{{item.id}}">{{isTibetan ? 'རྩོམ་སྒྲིག' : '编辑'}}</button>
+                  <button class="btn-delete" size="mini" bindtap="onDeleteItem" data-id="{{item.id}}">{{isTibetan ? 'བསུབས' : '删除'}}</button>
+                </view>
+              </view>
+              
+              <view class="count-buttons">
+                <block wx:for="{{item.quickCounts}}" wx:key="*this" wx:for-item="count">
+                  <button class="count-btn" bindtap="onAddCount" data-id="{{item.id}}" data-count="{{count}}">+{{count}}</button>
+                </block>
+                <view class="custom-input">
+                  <input
+                    type="number"
+                    placeholder="{{isTibetan ? 'གཞན་གྱི་གྲངས་ཀ' : '输入其他数字'}}"
+                    class="custom-input-field"
+                    bindinput="onCustomInput"
+                    data-id="{{item.id}}"
+                    value="{{customInputValue[item.id]}}"
+                  />
+                  <button class="custom-add-btn" catchtap="onAddCustomCount" data-id="{{item.id}}">+</button>
+                </view>
+              </view>
+            </view>
+          </block>
+        </view>
+        
+        <!-- 新增按钮 -->
+        <view class="add-button-container">
+          <button class="btn-primary" bindtap="onAddItem">{{isTibetan ? 'ཁ་འདོན་གསར་སྣོན།' : '新增经文'}}</button>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 右侧：统计与汇总区 -->
+    <view class="right-section">
+      <!-- 当日汇总 -->
+      <view class="card summary-card">
+        <view class="card-header">
+          <text class="icon">📅</text>
+          <text class="card-title">{{isTibetan ? 'དེ་རིང་སྤྱི་བསྡོམས' : '当日汇总'}}</text>
+        </view>
+
+        <view class="summary-content">
+          <block wx:if="{{todayRecords.length > 0}}">
+            <block wx:for="{{todayRecords}}" wx:key="timestamp">
+              <view class="summary-item">
+                <text class="summary-name">{{item.name}}</text>
+                <view class="summary-actions">
+                  <text class="summary-count">{{item.count}} {{isTibetan ? 'ཐེངས།' : '遍'}}</text>
+                  <button class="btn-edit-small" size="mini" bindtap="onEditRecord" data-record="{{item}}">{{isTibetan ? 'རྩོམ་སྒྲིག' : '编辑'}}</button>
+                  <button class="btn-delete-small" size="mini" bindtap="onDeleteRecord" data-record="{{item}}">{{isTibetan ? 'བསུབས' : '删除'}}</button>
+                </view>
+              </view>
+            </block>
+          </block>
+          <block wx:else>
+            <text class="empty-text">{{isTibetan ? 'དེ་རིང་ཁ་འདོན་སྤྱི་བསྡོམས་གྲངས་ཀ་མེད།' : '今日暂无记录'}}</text>
+          </block>
+
+          <view class="summary-actions">
+            <button class="btn-secondary" size="mini" bindtap="onCopySummary">{{isTibetan ? 'འདྲ་བཟོ།' : '复制'}}</button>
+            <button class="btn-danger" size="mini" bindtap="onClearDaily">{{isTibetan ? 'བསུབས' : '清空'}}</button>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 总计统计 -->
+      <view class="card statistics-card">
+        <view class="card-header">
+          <text class="icon">📊</text>
+          <text class="card-title">{{isTibetan ? 'སྡོམས་རྩིས' : '总计统计'}}</text>
+        </view>
+        
+        <!-- 统计选项卡 -->
+        <view class="tab-container">
+          <view 
+            class="tab-item {{currentTab === 'daily' ? 'tab-active' : ''}}"
+            bindtap="onSwitchTab" 
+            data-tab="daily"
+          >
+                  >
+            {{isTibetan ? 'ཉིན' : '日'}}
+          </view>
+          <view
+            class="tab-item {{currentTab === 'monthly' ? 'tab-active' : ''}}"
+            bindtap="onSwitchTab"
+            data-tab="monthly"
+          >
+            {{isTibetan ? 'ཟླ' : '月'}}
+          </view>
+          <view
+            class="tab-item {{currentTab === 'yearly' ? 'tab-active' : ''}}"
+            bindtap="onSwitchTab"
+            data-tab="yearly"
+          >
+            {{isTibetan ? 'ལོ' : '年'}}
+          </view>
+        </view>
+        
+        <!-- 统计内容 -->
+        <view class="statistics-content">
+          <block wx:if="{{currentTab === 'daily'}}">
+            <view wx:if="{{dailyStatistics.totalCount > 0}}">
+              <view class="stat-header">
+                <text class="stat-date">{{dailyStatistics.date}}</text>
+                <text class="stat-total">{{dailyStatistics.totalCount}}</text>
+                <text class="stat-label">{{isTibetan ? 'སྡོམས་གྲངས' : '总计数'}}</text>
+              </view>
+              <view class="stat-list">
+                <block wx:for="{{dailyStatistics.records}}" wx:key="id">
+                  <view class="stat-item">
+                    <text>{{item.name}}</text>
+                    <text class="stat-count">{{item.count}} {{isTibetan ? 'ཐེངས།' : '遍'}}</text>
+                  </view>
+                </block>
+              </view>
+            </view>
+            <view wx:else class="empty-stat">
+              <text>{{isTibetan ? 'དེ་རིང་སྡོམས་རྩིས་མེད' : '今日暂无统计数据'}}</text>
+            </view>
+          </block>
+
+          <block wx:elif="{{currentTab === 'monthly'}}">
+            <view wx:if="{{monthlyStatistics.totalCount > 0}}">
+              <view class="stat-header">
+                <text class="stat-date">{{monthlyStatistics.date}}</text>
+                <text class="stat-total">{{monthlyStatistics.totalCount}}</text>
+                <text class="stat-label">{{isTibetan ? 'སྡོམས་གྲངས' : '总计数'}}</text>
+              </view>
+              <view class="stat-list">
+                <block wx:for="{{monthlyStatistics.records}}" wx:key="id">
+                  <view class="stat-item">
+                    <text>{{item.name}}</text>
+                    <text class="stat-count">{{item.count}} {{isTibetan ? 'ཐེངས།' : '遍'}}</text>
+                  </view>
+                </block>
+              </view>
+            </view>
+            <view wx:else class="empty-stat">
+              <text>{{isTibetan ? 'ཟླ་འདིར་སྡོམས་རྩིས་མེད' : '本月暂无统计数据'}}</text>
+            </view>
+          </block>
+
+          <block wx:elif="{{currentTab === 'yearly'}}">
+            <view wx:if="{{yearlyStatistics.totalCount > 0}}">
+              <view class="stat-header">
+                <text class="stat-date">{{yearlyStatistics.date}}</text>
+                <text class="stat-total">{{yearlyStatistics.totalCount}}</text>
+                <text class="stat-label">{{isTibetan ? 'སྡོམས་གྲངས' : '总计数'}}</text>
+              </view>
+              <view class="stat-list">
+                <block wx:for="{{yearlyStatistics.records}}" wx:key="id">
+                  <view class="stat-item">
+                    <text>{{item.name}}</text>
+                    <text class="stat-count">{{item.count}} {{isTibetan ? 'ཐེངས།' : '遍'}}</text>
+                  </view>
+                </block>
+              </view>
+            </view>
+            <view wx:else class="empty-stat">
+              <text>{{isTibetan ? 'ལོ་འདིར་སྡོམས་རྩིས་མེད' : '本年暂无统计数据'}}</text>
+            </view>
+          </block>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部信息 -->
+  <view class="footer">
+    <text>{{isTibetan ? '© 2026 ནང་པའི་བསྙེན་པ་གྲངས་འཛིན | དགེ་བ་འདི་ཡིས་རྫོགས་བྱང་མཆོག' : '© 2026 念佛计数小程序 | 愿以此功德，庄严佛净土'}}</text>
+  </view>
+</view>
+
+<!-- 新增/编辑经文模态框 -->
+<view class="modal {{showModal ? 'modal-show' : ''}}" bindtap="onCloseModal">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-header">
+      <text class="modal-title">{{modalTitle}}</text>
+    </view>
+    
+    <view class="modal-body">
+      <view class="form-group">
+        <text class="form-label">{{isTibetan ? 'ཁ་འདོན་མིང' : '经文名称'}}</text>
+        <input
+          class="form-input"
+          placeholder="{{isTibetan ? 'ཁ་འདོན་མིང་འདྲེན་རོགས' : '请输入经文名称'}}"
+          value="{{chantingName}}"
+          bindinput="onChantingNameInput"
+        />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">{{isTibetan ? 'མགྱོགས་གྲངས་འཇལ' : '快捷计数选项'}}</text>
+        <view class="quick-counts">
+          <input
+            class="quick-count-input"
+            type="number"
+            value="{{quickCount1}}"
+            bindinput="onQuickCount1Input"
+          />
+          <input
+            class="quick-count-input"
+            type="number"
+            value="{{quickCount2}}"
+            bindinput="onQuickCount2Input"
+          />
+          <input
+            class="quick-count-input"
+            type="number"
+            value="{{quickCount3}}"
+            bindinput="onQuickCount3Input"
+          />
+        </view>
+      </view>
+    </view>
+
+    <view class="modal-footer">
+      <button class="btn-cancel" bindtap="onCloseModal">{{isTibetan ? 'འགོག་པ' : '取消'}}</button>
+      <button class="btn-save" bindtap="onSaveItem">{{isTibetan ? 'ཉར་བ' : '保存'}}</button>
+    </view>
+  </view>
+</view>
+
+<!-- 编辑记录模态框 -->
+<view class="modal {{showEditModal ? 'modal-show' : ''}}" bindtap="onCloseEditModal">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-header">
+      <text class="modal-title">{{isTibetan ? 'བཀོད་པ་སྒྱུར' : '编辑记录'}}</text>
+    </view>
+
+    <view class="modal-body">
+      <view class="form-group">
+        <text class="form-label">{{isTibetan ? 'ཁ་འདོན་མིང' : '经文名称'}}</text>
+        <input
+          class="form-input"
+          value="{{editChantingName}}"
+          disabled
+        />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">{{isTibetan ? 'གྲངས་འཛིན' : '计数'}}</text>
+        <input
+          class="form-input"
+          type="number"
+          placeholder="{{isTibetan ? 'གྲངས་འཛིན་འདྲེན་རོགས' : '请输入计数'}}"
+          value="{{editCount}}"
+          bindinput="onEditCountInput"
+        />
+      </view>
+    </view>
+
+    <view class="modal-footer">
+      <button class="btn-cancel" bindtap="onCloseEditModal">{{isTibetan ? 'འགོག་པ' : '取消'}}</button>
+      <button class="btn-save" bindtap="onSaveRecord">{{isTibetan ? 'ཉར་བ' : '保存'}}</button>
+    </view>
+  </view>
+</view>
+
+<!-- 提示信息 -->
+<view class="toast {{showToast ? 'toast-show' : ''}} {{toastType === 'error' ? 'toast-error' : 'toast-success'}}">
+  <text class="toast-icon">{{toastType === 'error' ? '❌' : '✅'}}</text>
+  <text class="toast-message">{{toastMessage}}</text>
+</view>
