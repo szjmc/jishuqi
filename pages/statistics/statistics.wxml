@@ -1,8 +1,8 @@
 <view class="container">
   <view class="header">
-    <view class="title">{{isTibetan ? 'བསྡུས་གྲངས་ལྟེ་ག' : '统计中心'}}</view>
+    <view class="title">{{isTibetan ? 'སྡོམ་རྩིས་ལྟེ་གནས།' : '统计中心'}}</view>
     <view class="translate-btn" bindtap="toggleLanguage">
-      {{isTibetan ? '中文' : '藏文'}}
+      {{isTibetan ? '中文' : 'བོད་ཡིག།'}}
     </view>
   </view>
 
@@ -81,7 +81,7 @@
       </view>
 
       <view class="records-list">
-        <text class="list-title">{{isTibetan ? 'ཆོས་གཞུང་སོ་སོའི་ལོ་སྡོམས' : '各经文年度统计'}}</text>
+        <text class="list-title">{{isTibetan ? 'ཁ་འདོན་སྤྱི་བསྡོམས་གྲངས་ཀ' : '各经文年度统计'}}</text>
         <view class="record-item" wx:for="{{yearlyStatistics.records}}" wx:key="id">
           <text class="record-name">{{item.name}}</text>
           <text class="record-count">{{item.count}}</text>

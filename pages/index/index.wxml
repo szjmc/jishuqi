@@ -2,8 +2,8 @@
 <view class="container">
   <!-- 标题 -->
   <view class="header">
-    <text class="title">{{isTibetan ? 'ཁ་འདོན་སྤྱི་བསྡོམས་་གྲངས་འཛིན' : '计数小程序'}}</text>
-    <text class="subtitle">{{isTibetan ? 'ཉིན་ལྟར་ནང་པའི་བསྙེན་པ་བཀོད་ནས་བསོད་ནམས་གསོག་པ' : '记录每日念佛修行，积累福德资粮'}}</text>
+    <text class="title">{{isTibetan ? 'ཁ་འདོན་སྤྱི་བསྡོམས་གྲངས་འཛིན' : '计数小程序'}}</text>
+    <text class="subtitle">{{isTibetan ? 'ཚོགས་གསོག་དགེ་སྒྲུབ།' : '记录每日念佛修行，积累福德资粮'}}</text>
     <view class="translate-btn" bindtap="toggleLanguage">
       {{isTibetan ? '中文' : 'བོད་ཡིག།'}}
     </view>
