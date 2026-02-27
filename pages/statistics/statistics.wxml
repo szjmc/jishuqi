@@ -81,7 +81,7 @@
       </view>
 
       <view class="records-list">
-        <text class="list-title">{{isTibetan ? 'ཁ་འདོན་སྤྱི་བསྡོམས་གྲངས་ཀ' : '各经文年度统计'}}</text>
+        <text class="list-title">{{isTibetan ? 'ལོ་འདིའི་ཁ་འདོན་སྤྱི་བསྡོམས་གྲངས་ཀ' : '各经文年度统计'}}</text>
         <view class="record-item" wx:for="{{yearlyStatistics.records}}" wx:key="id">
           <text class="record-name">{{item.name}}</text>
           <text class="record-count">{{item.count}}</text>
