@@ -1,8 +1,8 @@
 <view class="container">
   <view class="header">
-    <view class="title">{{isTibetan ? 'སྡོམ་རྩིས་ལྟེ་གནས།' : '统计中心'}}</view>
+    <view class="title">{{isTibetan ? 'སྡོམ་རྩིས་ལྟེ་ག' : '统计中心'}}</view>
     <view class="translate-btn" bindtap="toggleLanguage">
-      {{isTibetan ? '中文' : 'བོད་ཡིག།'}}
+      {{isTibetan ? '中文' : '藏文'}}
     </view>
   </view>
 
@@ -31,20 +31,36 @@
     <!-- 总计 -->
     <view wx:if="{{currentTab === 'total'}}" class="section">
       <view class="card total-card">
-        <text class="card-title">{{isTibetan ? 'ལོ་རྒྱུས་སྡོམས་རྩིས' : '历史累计统计'}}</text>
+        <text class="card-title">{{isTibetan ? 'ལོ་རྒྱུས་སྡོམ་རྩིས' : '历史累计统计'}}</text>
         <text class="big-number">{{totalStatistics.totalCount}}</text>
         <text class="label">{{isTibetan ? 'སྡོམས་གྲངས' : '累计总数'}}</text>
         <view class="info">
-          <text>{{isTibetan ? 'ཉིན་གྲངས་' + totalStatistics.totalDays + 'ཉིན' : '记录天数：' + totalStatistics.totalDays + ' 天'}}</text>
+          <text>{{isTibetan ? 'ཉིན་གྲངས་བཀོད་པ་དང་' + totalStatistics.totalDays + 'ཉིན' : '记录天数：' + totalStatistics.totalDays + ' 天'}}</text>
           <text>{{isTibetan ? 'འགོ་བཙུགས་ཚེས་གྲངས་' + totalStatistics.startDate : '起始日期：' + totalStatistics.startDate}}</text>
         </view>
       </view>
 
       <view class="records-list">
-        <text class="list-title">{{isTibetan ? 'ཁ་འདོན་སྤྱི་བསྡོམས་གྲངས་ཀ' : '各经文统计'}}</text>
+        <text class="list-title">{{isTibetan ? 'ཆོས་གཞུང་སོ་སོའི་སྡོམ་རྩིས' : '各经文统计'}}</text>
         <view class="record-item" wx:for="{{totalStatistics.records}}" wx:key="id">
-          <text class="record-name">{{item.name}}</text>
-          <text class="record-count">{{item.count}}</text>
+          <view class="record-main" bindtap="toggleRecordDetail" data-type="total" data-id="{{item.id}}">
+            <text class="record-name">{{item.name}}</text>
+            <view class="record-right">
+              <text class="record-count">{{item.count}}</text>
+              <text class="expand-icon">{{expandedRecords[item.id] ? '−' : '+'}}</text>
+            </view>
+          </view>
+          <!-- 详细记录列表 -->
+          <view wx:if="{{expandedRecords[item.id]}}" class="detail-list">
+            <view class="detail-item" wx:for="{{item.details}}" wx:key="recordId" wx:for-item="detail">
+              <text class="detail-date">{{detail.dateStr}}</text>
+              <text class="detail-count">{{isTibetan ? 'ཁ་བསྡུས' : '添加'}} {{detail.count}}</text>
+              <view class="detail-actions">
+                <button class="btn-detail-edit" size="mini" bindtap="editRecord" data-record="{{detail}}" data-type="total" catchtap>{{isTibetan ? 'སྒྱུར' : '编辑'}}</button>
+                <button class="btn-detail-delete" size="mini" bindtap="deleteRecord" data-record-id="{{detail.recordId}}" data-type="total" catchtap>{{isTibetan ? 'བསུབས' : '删除'}}</button>
+              </view>
+            </view>
+          </view>
         </view>
         <view wx:if="{{totalStatistics.records.length === 0}}" class="empty-tip">
           {{isTibetan ? 'ད་རེབ་གནས་ཚུལ་མེད།' : '暂无数据'}}
@@ -61,10 +77,26 @@
       </view>
 
       <view class="records-list">
-        <text class="list-title">{{isTibetan ? 'དེ་རིང་གི་ཁ་འདོན་སྤྱི་བསྡོམས་གྲངས་ཀ' : '今日记录'}}</text>
+        <text class="list-title">{{isTibetan ? 'དེ་རིང་གི་བཀོད་པ་དང་' : '今日记录'}}</text>
         <view class="record-item" wx:for="{{dailyStatistics.records}}" wx:key="id">
-          <text class="record-name">{{item.name}}</text>
-          <text class="record-count">{{item.count}}</text>
+          <view class="record-main" bindtap="toggleRecordDetail" data-type="daily" data-id="{{item.id}}">
+            <text class="record-name">{{item.name}}</text>
+            <view class="record-right">
+              <text class="record-count">{{item.count}}</text>
+              <text class="expand-icon">{{expandedRecords[item.id] ? '−' : '+'}}</text>
+            </view>
+          </view>
+          <!-- 详细记录列表 -->
+          <view wx:if="{{expandedRecords[item.id]}}" class="detail-list">
+            <view class="detail-item" wx:for="{{item.details}}" wx:key="recordId" wx:for-item="detail">
+              <text class="detail-time">{{detail.timeStr}}</text>
+              <text class="detail-count">{{isTibetan ? 'ཁ་བསྡུས' : '添加'}} {{detail.count}}</text>
+              <view class="detail-actions">
+                <button class="btn-detail-edit" size="mini" bindtap="editRecord" data-record="{{detail}}" data-type="daily" catchtap>{{isTibetan ? 'སྒྱུར' : '编辑'}}</button>
+                <button class="btn-detail-delete" size="mini" bindtap="deleteRecord" data-record-id="{{detail.recordId}}" data-type="daily" catchtap>{{isTibetan ? 'བསུབས' : '删除'}}</button>
+              </view>
+            </view>
+          </view>
         </view>
         <view wx:if="{{dailyStatistics.records.length === 0}}" class="empty-tip">
           {{isTibetan ? 'དེ་རིང་བཀོད་པ་མེད།' : '今日暂无记录'}}
@@ -81,10 +113,26 @@
       </view>
 
       <view class="records-list">
-        <text class="list-title">{{isTibetan ? 'ལོ་འདིའི་ཁ་འདོན་སྤྱི་བསྡོམས་གྲངས་ཀ' : '各经文年度统计'}}</text>
+        <text class="list-title">{{isTibetan ? 'ཆོས་གཞུང་སོ་སོའི་ལོ་སྡོམས' : '各经文年度统计'}}</text>
         <view class="record-item" wx:for="{{yearlyStatistics.records}}" wx:key="id">
-          <text class="record-name">{{item.name}}</text>
-          <text class="record-count">{{item.count}}</text>
+          <view class="record-main" bindtap="toggleRecordDetail" data-type="yearly" data-id="{{item.id}}">
+            <text class="record-name">{{item.name}}</text>
+            <view class="record-right">
+              <text class="record-count">{{item.count}}</text>
+              <text class="expand-icon">{{expandedRecords[item.id] ? '−' : '+'}}</text>
+            </view>
+          </view>
+          <!-- 详细记录列表 -->
+          <view wx:if="{{expandedRecords[item.id]}}" class="detail-list">
+            <view class="detail-item" wx:for="{{item.details}}" wx:key="recordId" wx:for-item="detail">
+              <text class="detail-date">{{detail.dateStr}}</text>
+              <text class="detail-count">{{isTibetan ? 'ཁ་བསྡུས' : '添加'}} {{detail.count}}</text>
+              <view class="detail-actions">
+                <button class="btn-detail-edit" size="mini" bindtap="editRecord" data-record="{{detail}}" data-type="yearly" catchtap>{{isTibetan ? 'སྒྱུར' : '编辑'}}</button>
+                <button class="btn-detail-delete" size="mini" bindtap="deleteRecord" data-record-id="{{detail.recordId}}" data-type="yearly" catchtap>{{isTibetan ? 'བསུབས' : '删除'}}</button>
+              </view>
+            </view>
+          </view>
         </view>
         <view wx:if="{{yearlyStatistics.records.length === 0}}" class="empty-tip">
           {{isTibetan ? 'ལོ་འདིར་བཀོད་པ་མེད།' : '本年度暂无记录'}}
@@ -92,5 +140,49 @@
       </view>
     </view>
 
+  </view>
+</view>
+
+<!-- 编辑记录模态框 -->
+<view class="modal {{showEditModal ? 'modal-show' : ''}}" bindtap="onCloseEditModal">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-header">
+      <text class="modal-title">{{isTibetan ? 'བཀོད་པ་སྒྱུར' : '编辑记录'}}</text>
+    </view>
+
+    <view class="modal-body">
+      <view class="form-group">
+        <text class="form-label">{{isTibetan ? 'ཆོས་གཞུང་མིང' : '经文名称'}}</text>
+        <input
+          class="form-input"
+          value="{{editRecordInfo.name}}"
+          disabled
+        />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">{{isTibetan ? 'ཁ་བསྡུས་གྲངས་འཛིན' : '添加数量'}}</text>
+        <input
+          class="form-input"
+          type="number"
+          value="{{editRecordInfo.count}}"
+          bindinput="onEditCountInput"
+        />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">{{isTibetan ? 'ཁ་བསྡུས་དུས་ཚེས་གྲངས' : '添加时间'}}</text>
+        <input
+          class="form-input"
+          value="{{editRecordInfo.timeStr}}"
+          disabled
+        />
+      </view>
+    </view>
+
+    <view class="modal-footer">
+      <button class="btn-cancel" bindtap="onCloseEditModal">{{isTibetan ? 'འགོག་པ' : '取消'}}</button>
+      <button class="btn-save" bindtap="onSaveEditRecord">{{isTibetan ? 'ཉར་བ' : '保存'}}</button>
+    </view>
   </view>
 </view>

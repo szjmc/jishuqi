@@ -204,21 +204,18 @@ Page({
       console.log('[addCount] 初始化今日记录');
     }
 
-    // 查找今日是否已有该经文的记录
-    const existingRecord = dailyRecords[today].find(record => record.id === id);
+    // 生成唯一记录ID
+    const recordId = `rec_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-    if (existingRecord) {
-      existingRecord.count += count;
-      console.log('[addCount] 更新现有记录，新count:', existingRecord.count);
-    } else {
-      dailyRecords[today].push({
-        id: id,
-        name: item.name,
-        count: count,
-        timestamp: new Date().toISOString()
-      });
-      console.log('[addCount] 添加新记录');
-    }
+    // 添加新记录（每次都是独立记录，不合并）
+    dailyRecords[today].push({
+      recordId: recordId,
+      id: id,
+      name: item.name,
+      count: count,
+      timestamp: new Date().toISOString()
+    });
+    console.log('[addCount] 添加新记录');
 
     console.log('[addCount] 准备保存，dailyRecords:', dailyRecords);
 
